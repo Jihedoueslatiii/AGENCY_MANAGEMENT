@@ -1,0 +1,137 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- Floating Add Flight Button -->
+          <button 
+          (click)="openForm()" 
+          class="button">
+          <span>Add Flight</span>
+        </button>
+        
+  
+          <div class="card">
+            <div class="card-header card-header-danger">
+              <h4 class="card-title text-2xl font-bold">Flight List</h4>
+              <p class="card-category text-sm text-gray-500">Here is a subtitle for this table</p>
+            </div>
+            <div class="card-body p-4">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead class="text-primary bg-indigo-100">
+                    <tr>
+                      <th>ID</th>
+                      <th>Flight Number</th>
+                      <th>Company</th>
+                      <th>Departure Airport</th>
+                      <th>Arrival Airport</th>
+                      <th>Departure Date</th>
+                      <th>Departure Time</th>
+                      <th>Arrival Time</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let flight of flights">
+                      <td>{{ flight.idVol }}</td>
+                      <td>{{ flight.numVol }}</td>
+                      <td>{{ flight.compagnie }}</td>
+                      <td>{{ flight.aeroportDepart }}</td>
+                      <td>{{ flight.aeroportArrivee }}</td>
+                      <td>{{ flight.dateVol }}</td>
+                      <td>{{ flight.heureDepart }}</td>
+                      <td>{{ flight.heureArrivee }}</td>
+                      <td class="text-primary">{{ flight.etatVol }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+   <!-- Add Flight Form (Enhanced Modal) -->
+<div *ngIf="formVisible" class="modal fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-2xl p-10 transform transition-all duration-300">
+      <span (click)="closeForm()" class="absolute top-4 right-4 text-4xl text-gray-500 hover:text-red-500 cursor-pointer transition">&times;</span>
+      <h2 class="text-3xl font-bold text-center text-indigo-600 mb-8">Add New Flight</h2>
+      
+      <form (ngSubmit)="onSubmit()">
+        <!-- Flight Number -->
+        <div class="relative z-0 w-full mb-6 group">
+          <input [(ngModel)]="newFlight.numVol" name="numVol" id="numVol" type="text" required
+            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
+            placeholder=" " />
+          <label for="numVol" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Flight Number</label>
+        </div>
+  
+        <!-- Company -->
+        <div class="relative z-0 w-full mb-6 group">
+          <input [(ngModel)]="newFlight.compagnie" name="compagnie" id="compagnie" type="text" required
+            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
+            placeholder=" " />
+          <label for="compagnie" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Company</label>
+        </div>
+  
+        <!-- Departure and Arrival Airports -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="relative z-0 w-full group">
+            <input [(ngModel)]="newFlight.aeroportDepart" name="aeroportDepart" id="aeroportDepart" type="text" required
+              class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
+              placeholder=" " />
+            <label for="aeroportDepart" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Departure Airport</label>
+          </div>
+          <div class="relative z-0 w-full group">
+            <input [(ngModel)]="newFlight.aeroportArrivee" name="aeroportArrivee" id="aeroportArrivee" type="text" required
+              class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
+              placeholder=" " />
+            <label for="aeroportArrivee" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Arrival Airport</label>
+          </div>
+        </div>
+  
+        <!-- Departure Date and Time -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="relative z-0 w-full group">
+            <input [(ngModel)]="newFlight.dateVol" name="dateVol" id="dateVol" type="date" required
+              class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
+              placeholder=" " />
+            <label for="dateVol" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Departure Date</label>
+          </div>
+          <div class="relative z-0 w-full group">
+            <input [(ngModel)]="newFlight.heureDepart" name="heureDepart" id="heureDepart" type="time" required
+              class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
+              placeholder=" " />
+            <label for="heureDepart" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Departure Time</label>
+          </div>
+        </div>
+  
+        <!-- Arrival Time and Status -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="relative z-0 w-full group">
+            <input [(ngModel)]="newFlight.heureArrivee" name="heureArrivee" id="heureArrivee" type="time" required
+              class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
+              placeholder=" " />
+            <label for="heureArrivee" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Arrival Time</label>
+          </div>
+          <div class="relative z-0 w-full group">
+            <select [(ngModel)]="newFlight.etatVol" name="etatVol" id="etatVol" required
+              class="block w-full text-sm text-gray-900 bg-transparent border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none p-2">
+              <option value="" disabled>Select Status</option>
+              <option value="PROGRAMMED">PROGRAMMED</option>
+              <option value="IN_FLIGHT">IN FLIGHT</option>
+              <option value="DELAYED">DELAYED</option>
+              <option value="CANCELLED">CANCELLED</option>
+              <option value="LANDED">LANDED</option>
+            </select>
+            <label for="etatVol" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Flight Status</label>
+          </div>
+        </div>
+  
+        <!-- Submit Button -->
+        <button type="submit" class="mt-8 w-full bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 focus:outline-none transition-all duration-300 text-lg">Add Flight</button>
+      </form>
+    </div>
+  </div>
+  
