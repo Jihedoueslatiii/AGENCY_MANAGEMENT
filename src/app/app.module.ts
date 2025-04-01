@@ -6,19 +6,23 @@ import { AppComponent } from './app.component';
 import { FlightComponent } from './components/flight/flight.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarComponent } from './calendar/calendar.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    FlightComponent
+    FlightComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    FullCalendarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

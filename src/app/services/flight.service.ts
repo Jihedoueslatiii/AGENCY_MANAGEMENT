@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Flight } from '../flight.model';
 
 @Injectable({
   providedIn: 'root',
@@ -8,24 +9,32 @@ import { Observable } from 'rxjs';
 export class FlightService {
   private apiUrl = 'http://localhost:8089/flight/api/flights'; // Update to your backend's URL
 
+
   constructor(private http: HttpClient) {}
 
-  getAllFlights(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+  // Get all flights
+  getAllFlights(): Observable<Flight[]> {
+    return this.http.get<Flight[]>(this.apiUrl);
   }
 
-  getFlightById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  // Get flight by ID
+  getFlightById(id: number): Observable<Flight> {
+    return this.http.get<Flight>(`${this.apiUrl}/${id}`);
   }
 
-  addFlight(flight: any) {
-    return this.http.post('http://localhost:8089/flight/api/flights', flight, {
-      headers: { 'Content-Type': 'application/json' }
-    });
+  // Add a new flight
+  addFlight(flight: Flight): Observable<Flight> {
+    console.log('Sending flight data:', flight); // Add this line
+    return this.http.post<Flight>(this.apiUrl, flight);
   }
-  
 
+  // Delete a flight by ID
   deleteFlight(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // Update an existing flight
+  updateFlight(flight: Flight): Observable<Flight> {
+    return this.http.put<Flight>(`${this.apiUrl}/${flight.idVol}`, flight);
   }
 }

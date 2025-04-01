@@ -1,137 +1,267 @@
-<div class="main-content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <!-- Floating Add Flight Button -->
-          <button 
-          (click)="openForm()" 
-          class="button">
-          <span>Add Flight</span>
-        </button>
-        
-  
-          <div class="card">
-            <div class="card-header card-header-danger">
-              <h4 class="card-title text-2xl font-bold">Flight List</h4>
-              <p class="card-category text-sm text-gray-500">Here is a subtitle for this table</p>
-            </div>
-            <div class="card-body p-4">
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead class="text-primary bg-indigo-100">
-                    <tr>
-                      <th>ID</th>
-                      <th>Flight Number</th>
-                      <th>Company</th>
-                      <th>Departure Airport</th>
-                      <th>Arrival Airport</th>
-                      <th>Departure Date</th>
-                      <th>Departure Time</th>
-                      <th>Arrival Time</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let flight of flights">
-                      <td>{{ flight.idVol }}</td>
-                      <td>{{ flight.numVol }}</td>
-                      <td>{{ flight.compagnie }}</td>
-                      <td>{{ flight.aeroportDepart }}</td>
-                      <td>{{ flight.aeroportArrivee }}</td>
-                      <td>{{ flight.dateVol }}</td>
-                      <td>{{ flight.heureDepart }}</td>
-                      <td>{{ flight.heureArrivee }}</td>
-                      <td class="text-primary">{{ flight.etatVol }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <header class="bg-indigo-600 shadow-lg">
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+          </svg>
+          <h1 class="text-xl font-bold text-white">TripAgency Pro</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button class="text-white hover:text-indigo-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </button>
+          <div class="h-8 w-8 rounded-full bg-indigo-400 flex items-center justify-center text-white font-semibold">
+            AM
           </div>
         </div>
       </div>
     </div>
-  
-   <!-- Add Flight Form (Enhanced Modal) -->
-<div *ngIf="formVisible" class="modal fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-    <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-2xl p-10 transform transition-all duration-300">
-      <span (click)="closeForm()" class="absolute top-4 right-4 text-4xl text-gray-500 hover:text-red-500 cursor-pointer transition">&times;</span>
-      <h2 class="text-3xl font-bold text-center text-indigo-600 mb-8">Add New Flight</h2>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-6 py-8">
+    <!-- Dashboard Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">Flight Management</h2>
+        <p class="text-gray-600">Manage all flight operations and schedules</p>
+      </div>
+      <button (click)="openForm()" class="mt-4 md:mt-0 flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-md transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
+        <span>Add New Flight</span>
+      </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500">Total Flights</p>
+            <h3 class="text-2xl font-bold">{{ stats.total }}</h3>
+          </div>
+          <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500">Scheduled</p>
+            <h3 class="text-2xl font-bold">{{ stats.scheduled }}</h3>
+          </div>
+          <div class="p-3 rounded-full bg-green-100 text-green-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500">In Flight</p>
+            <h3 class="text-2xl font-bold">{{ stats.inFlight }}</h3>
+          </div>
+          <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500">Delayed</p>
+            <h3 class="text-2xl font-bold">{{ stats.delayed }}</h3>
+          </div>
+          <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flight List Card -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-gray-800">Flight List</h3>
+          <div class="relative">
+            <input type="text" 
+                   [(ngModel)]="searchTerm" 
+                   (input)="filterFlights()"
+                   placeholder="Search flights..." 
+                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flight Number</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Departure</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Arrival</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let flight of filteredFlights" class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ flight.idVol }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-900">{{ flight.numVol }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">{{ flight.compagnie }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">{{ flight.aeroportDepart }}</div>
+                <div class="text-sm text-gray-500">{{ flight.heureDepart }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">{{ flight.aeroportArrivee }}</div>
+                <div class="text-sm text-gray-500">{{ flight.heureArrivee }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">{{ flight.dateVol }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full"
+                      [ngClass]="{
+                        'bg-green-100 text-green-800': flight.etatVol === 'PROGRAMMED',
+                        'bg-blue-100 text-blue-800': flight.etatVol === 'IN_FLIGHT',
+                        'bg-yellow-100 text-yellow-800': flight.etatVol === 'DELAYED',
+                        'bg-red-100 text-red-800': flight.etatVol === 'CANCELLED',
+                        'bg-indigo-100 text-indigo-800': flight.etatVol === 'LANDED'
+                      }">
+                  {{ flight.etatVol }}
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="filteredFlights.length === 0">
+              <td colspan="7" class="px-6 py-4 text-center text-gray-500">No flights found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add Flight Modal -->
+  <div *ngIf="formVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white rounded-xl shadow-xl p-8 w-full max-w-2xl relative">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold text-gray-800">Add New Flight</h3>
+        <button (click)="closeForm()" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
       
-      <form (ngSubmit)="onSubmit()">
-        <!-- Flight Number -->
-        <div class="relative z-0 w-full mb-6 group">
-          <input [(ngModel)]="newFlight.numVol" name="numVol" id="numVol" type="text" required
-            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
-            placeholder=" " />
-          <label for="numVol" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Flight Number</label>
-        </div>
-  
-        <!-- Company -->
-        <div class="relative z-0 w-full mb-6 group">
-          <input [(ngModel)]="newFlight.compagnie" name="compagnie" id="compagnie" type="text" required
-            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
-            placeholder=" " />
-          <label for="compagnie" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Company</label>
-        </div>
-  
-        <!-- Departure and Arrival Airports -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="relative z-0 w-full group">
-            <input [(ngModel)]="newFlight.aeroportDepart" name="aeroportDepart" id="aeroportDepart" type="text" required
-              class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
-              placeholder=" " />
-            <label for="aeroportDepart" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Departure Airport</label>
+      <form (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Flight Number</label>
+            <input [(ngModel)]="newFlight.numVol" name="numVol" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                   placeholder="e.g. AF1234" required>
           </div>
-          <div class="relative z-0 w-full group">
-            <input [(ngModel)]="newFlight.aeroportArrivee" name="aeroportArrivee" id="aeroportArrivee" type="text" required
-              class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
-              placeholder=" " />
-            <label for="aeroportArrivee" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Arrival Airport</label>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Company</label>
+            <input [(ngModel)]="newFlight.compagnie" name="compagnie" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                   placeholder="e.g. Air France" required>
           </div>
         </div>
-  
-        <!-- Departure Date and Time -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="relative z-0 w-full group">
-            <input [(ngModel)]="newFlight.dateVol" name="dateVol" id="dateVol" type="date" required
-              class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
-              placeholder=" " />
-            <label for="dateVol" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Departure Date</label>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Departure Airport</label>
+            <input [(ngModel)]="newFlight.aeroportDepart" name="aeroportDepart" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                   placeholder="e.g. Paris CDG" required>
           </div>
-          <div class="relative z-0 w-full group">
-            <input [(ngModel)]="newFlight.heureDepart" name="heureDepart" id="heureDepart" type="time" required
-              class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
-              placeholder=" " />
-            <label for="heureDepart" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Departure Time</label>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Arrival Airport</label>
+            <input [(ngModel)]="newFlight.aeroportArrivee" name="aeroportArrivee" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                   placeholder="e.g. New York JFK" required>
           </div>
         </div>
-  
-        <!-- Arrival Time and Status -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="relative z-0 w-full group">
-            <input [(ngModel)]="newFlight.heureArrivee" name="heureArrivee" id="heureArrivee" type="time" required
-              class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none peer"
-              placeholder=" " />
-            <label for="heureArrivee" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Arrival Time</label>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Flight Date</label>
+            <input [(ngModel)]="newFlight.dateVol" name="dateVol" type="date" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                   required>
           </div>
-          <div class="relative z-0 w-full group">
-            <select [(ngModel)]="newFlight.etatVol" name="etatVol" id="etatVol" required
-              class="block w-full text-sm text-gray-900 bg-transparent border-b-2 border-gray-300 focus:border-indigo-500 focus:outline-none p-2">
-              <option value="" disabled>Select Status</option>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Departure Time</label>
+            <input [(ngModel)]="newFlight.heureDepart" name="heureDepart" type="time" step="1" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                   required>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Arrival Time</label>
+            <input [(ngModel)]="newFlight.heureArrivee" name="heureArrivee" type="time" step="1" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                   required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Flight Status</label>
+            <select [(ngModel)]="newFlight.etatVol" name="etatVol" 
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                    required>
+              <option value="">Select Status</option>
               <option value="PROGRAMMED">PROGRAMMED</option>
-              <option value="IN_FLIGHT">IN FLIGHT</option>
+              <option value="IN_FLIGHT">IN_FLIGHT</option>
               <option value="DELAYED">DELAYED</option>
               <option value="CANCELLED">CANCELLED</option>
               <option value="LANDED">LANDED</option>
             </select>
-            <label for="etatVol" class="absolute text-sm text-gray-500 peer-focus:text-indigo-500 transition-all -top-3 left-0">Flight Status</label>
           </div>
         </div>
-  
-        <!-- Submit Button -->
-        <button type="submit" class="mt-8 w-full bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 focus:outline-none transition-all duration-300 text-lg">Add Flight</button>
+
+        <div class="flex gap-4 mt-6">
+          <button type="button" (click)="closeForm()" 
+                  class="w-1/2 border border-gray-300 text-gray-700 p-3 rounded-lg hover:bg-gray-100 transition">
+            Cancel
+          </button>
+          <button type="submit" 
+                  class="w-1/2 bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 transition">
+            Add Flight
+          </button>
+        </div>
       </form>
     </div>
   </div>
-  
+</div>
